@@ -1,0 +1,15 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+
+# Virtual environments
+.venv/
+
+# .ruff_cache
+.ruff_cache/
+
+# OS Files
+.DS_Store
+
+# Version Control
+.git/

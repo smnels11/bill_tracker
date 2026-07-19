@@ -1,0 +1,41 @@
+name: bills_compose
+
+services:
+    app:
+        build:
+            context: .
+            dockerfile: dockerfile.bills
+        container_name: bills_app
+        ports:
+            - "8501:8501"
+        # local-dev credentials only; not exposed beyond localhost
+        environment:
+            POSTGRES_USER: bills_user
+            POSTGRES_PASSWORD: bills_password
+            POSTGRES_DB: bills_db
+            POSTGRES_HOST: db
+        depends_on:
+            - db
+        volumes:
+            - type: bind
+              source: ./app.py
+              target: /bills_st/app.py
+            - type: bind
+              source: ./utils.py
+              target: /bills_st/utils.py
+
+    db:
+        image: postgres:16
+        container_name: bills_db
+        environment:
+            POSTGRES_USER: bills_user
+            POSTGRES_PASSWORD: bills_password
+            POSTGRES_DB: bills_db
+        ports:
+            - "5432:5432"
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+            - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+    postgres_data:
